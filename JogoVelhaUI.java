@@ -42,13 +42,13 @@ public class JogoVelhaUI extends JPanel {
 		initial.addActionListener(new Initial());
 
 		minmax = new JButton("MinMax");
-		minmax.addActionListener(new Minmax());
+		minmax.addActionListener(new MinmaxExc());
 
 		minmaxCLimite = new JButton("Minmax com limite");
-		minmaxCLimite.addActionListener(new MinmaxCLimite());
+		minmaxCLimite.addActionListener(new MinmaxCLimiteExc());
 
 		corteAB = new JButton("Corte alfa-beta");
-		corteAB.addActionListener(new CorteAB());
+		corteAB.addActionListener(new CorteABExc());
 
 		marcar = new JButton("Marcar");
 		marcar.addActionListener(new Marcar());
@@ -144,7 +144,7 @@ public class JogoVelhaUI extends JPanel {
 		
 	}
 
-	public class Minmax implements ActionListener {
+	public class MinmaxExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 		}
@@ -156,13 +156,13 @@ public class JogoVelhaUI extends JPanel {
 		}
 	}
 
-	public class MinmaxCLimite implements ActionListener {
+	public class MinmaxCLimiteExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			
 		}
 	}
 
-	public class CorteAB implements ActionListener {
+	public class CorteABExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 		
 		}

@@ -1,100 +1,71 @@
-
 package trab_ia_jogovelha;
 
 import java.util.List;
 import java.util.ArrayList;
 
 /*
- * Nodo para a arvore, contem:
- * 		char[] board - quadro do jogo
- * 		Node father - nodo pai
- *		int lastEmpthy - possição do zero (vazio)
+ * Nodo para a arvore, contem: int[] board - quadro do jogo Node father - nodo
+ * pai No jogo quando é X = 1 e O = 2 no vetor de inteiros. O nivel 0 é igual o
+ * jogo vazio, ou seja, o vetor vazio.
  */
 public class Node {
-	private char[] board;
-	private Node father;
-	private int lastEmpthy;
-	
-	public  Node(Node father){
-		this.father = father;
-	}
-	
-	public  Node(char[] board){
-		this.board = board;
-	}
 
-	/*
-	 * set e get
-	 */
-	public void setLastEmpthy(int x){
-		this.lastEmpthy=x;
-	}
-	
-	public int getLastEmpthy(){
-		return this.lastEmpthy;
-	}
-	
-	public char[] getBoard(){
-		return this.board;
-	}
+    private int[] board = new int[8];
+    private Node father;
+    private int heuristica = 0;
+    private int nivel = 0;
+    private int jogador; //quando for X o valor é 1, for O o valor é 2.
 
-	public Node getFather() {
-		return this.father;
-	}
-	
-	/*
-	 * Métodos de movimentos
-	 */
-	public void up() {
-		char value;
-		int empthy = father.getLastEmpthy();
-		this.board = father.getBoard().clone();
-		value = board[empthy - 3];
-		board[empthy - 3] = '0';
-		board[empthy] = value;
-		lastEmpthy = empthy - 3;
-	}
+    public Node(Node father) {
+        this.father = father;
+    }
 
-	public void down() {
-		char value;
-		int empthy = father.getLastEmpthy();
-		this.board = father.getBoard().clone();
-		value = board[empthy + 3];
-		board[empthy + 3] = '0';
-		board[empthy] = value;
-		lastEmpthy = empthy + 3;
-	}
+    public Node(int[] board, int jogador, int nivel, int heuro) {
+        this.board = board;
+        this.heuristica = heuro;
+        this.nivel = nivel;
+        this.jogador = jogador;
 
-	public void rigth() {
-		char value;
-		int empthy = father.getLastEmpthy();
-		this.board = father.getBoard().clone();
-		value = board[empthy + 1];
-		board[empthy + 1] = '0';
-		board[empthy] = value;
-		lastEmpthy = empthy + 1;
-	}
+    }
 
-	public void left() {
-		char value;
-		int empthy = father.getLastEmpthy();
-		this.board = father.getBoard().clone();
-		value = board[empthy - 1];
-		board[empthy - 1] = '0';
-		board[empthy] = value;
-		lastEmpthy = empthy - 1;
-	}
-	
-	/*
-	 * Busca posição do zero
-	 */
-	public void findEmpthy() {
-		for (int i = 0; i < 9; i++)
-			if (board[i] == '0') {
-				lastEmpthy = i;
-				return;
-			}
-		lastEmpthy = 0;
-	}
-	
+    /*
+     * set e get
+     */
+    public int[] getBoard() {
+        return this.board;
+    }
+
+    public Node getFather() {
+        return this.father;
+    }
+
+//avalia qual jogador ganhou: 1 = X ou 2 = O
+    public int ganhou() {
+        int jogGanho = 0;
+        int i, cont = 0;
+        for (i = 0; i < 8; i++) {
+            if (i == 0 || i == 3 || i == 6) {  //avalia linhas
+                if ((this.board[i] == this.board[i + 1]) && (this.board[i + 1] == this.board[i + 2])) {
+                    jogGanho = this.board[i];
+                }
+            }
+
+            if (i == 0 || i == 1 || i == 2) {    //avalia as colunas
+                if ((this.board[i] == this.board[i + 1]) && (this.board[i + 1] == this.board[i + 2])) {
+                    jogGanho = this.board[i];
+                }
+            }
+            if (i == 6) {    //avalia a diagonal
+                if ((this.board[0] == this.board[4]) && (this.board[4] == this.board[8])) {
+                    jogGanho = this.board[4];
+                }
+            }
+            if (i == 7) {    //avalia a diagonal
+                if ((this.board[2] == this.board[4]) && (this.board[4] == this.board[6])) {
+                    jogGanho = this.board[4];
+                }
+            }
+        }
+        return jogGanho;
+    }
 }
