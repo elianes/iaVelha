@@ -14,17 +14,19 @@ public class Node {
     private Node father;
     private int heuristica = 0;
     private int nivel = 0;
-    private int jogador; //quando for X o valor é 1, for O o valor é 2.
+   
+    
+ 
 
     public Node(Node father) {
         this.father = father;
     }
 
-    public Node(int[] board, int jogador, int nivel, int heuro) {
+    public Node(int[] board, int nivel, int heuro) {
         this.board = board;
         this.heuristica = heuro;
         this.nivel = nivel;
-        this.jogador = jogador;
+     
 
     }
 
@@ -38,7 +40,12 @@ public class Node {
     public Node getFather() {
         return this.father;
     }
-
+    
+    public int getHeristica(){
+        return this.heuristica;
+    }
+    
+   
 //avalia qual jogador ganhou: 1 = X ou 2 = O
     public int ganhou() {
         int jogGanho = 0;

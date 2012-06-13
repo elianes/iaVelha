@@ -66,7 +66,7 @@ public class JogoVelhaModel {
     public void result(Node result) {
         for (int r=0; r<ROWS; r++) {
             for (int c=0; c<COLS; c++) {
-            	contents[r][c] = new Tile(r, c, Character.toString((result.getBoard()[r*3 + c])));
+            	contents[r][c] = new Tile(r, c, Integer.toString((result.getBoard()[r*3 + c])));
             	if(result.getBoard()[r*3 + c] == '0'){
             		emptyTile = contents[r][c];
             		emptyTile.setFace(null);

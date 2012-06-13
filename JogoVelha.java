@@ -16,11 +16,22 @@ public class JogoVelha {
     private Queue<Node> fifo;
     private Node father;
     
-    private int heuristica = 0;
+   private int heuristica = 0;
     private int nivel = 0;
-    private int jogador;
+    private int jogador;   //jogador 1 = X e o jogador 2 = O
     private int adversario;
+    
 
+    
+     public int getJogador(){
+        return this.jogador;
+    }
+     
+     public int[] getBoard(){
+         return this.board;
+     }
+     
+  
     public void geraArvore() {
         Node next;
         Node newNode;
@@ -31,14 +42,14 @@ public class JogoVelha {
             this.nivel++;
             this.jogador = jogaAgora;
             this.adversario = jogaDepois;
-            ganhou = geraFilhos(this.father);
+            geraFilhos(this.father);
             jogaAgora = this.adversario;
             jogaDepois = this.jogador;
            
-        } while (ganhou > 0);
+        } while (true);
     }
 
-    private int geraFilhos(Node father) {
+    private void geraFilhos(Node father) {
         Node newFilho;
         int ganhou = 0;
         for (int i = 0; i <= 8; i++) {
@@ -47,14 +58,17 @@ public class JogoVelha {
                 int x = functionAval(this.jogador);
                 int y = functionAval(this.adversario);
                 heuristica = x-y;
-                newFilho = new Node(board, jogador, nivel, heuristica);
-                ganhou = newFilho.ganhou();
+                newFilho = new Node(board, nivel, heuristica);
+                fifo.add(newFilho);
+                
 
             }
 
         }
-        return ganhou;
+        
     }
+    
+
 
     private int functionAval(int jogada) {
         int i,cont=0;

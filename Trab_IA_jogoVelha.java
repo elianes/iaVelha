@@ -17,7 +17,7 @@ public class Trab_IA_jogoVelha {
      */
     public static void main(String[] args) {
         
-        JFrame window = new JFrame("Puzzle-8 IA");
+        JFrame window = new JFrame("TIC - TAC - TOE");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(new JogoVelhaUI());
         window.pack();  
