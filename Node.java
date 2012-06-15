@@ -1,5 +1,6 @@
-package trab_ia_jogovelha;
+package iaVelha;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ public class Node {
     private int heuristica = 0;
     private int nivel =0;
     private int jogada=1;
+    private List<Node> filhos=null;
  
 
     public Node(Node father) {
@@ -22,15 +24,47 @@ public class Node {
         this.board = father.board.clone();
         this.nivel = father.nivel + 1;
         this.jogada = father.jogada == 1 ? 2 : 1; 
+        this.filhos=new LinkedList<Node>();
+        
     }
 
     public Node(int[] board) {
+    	this.father=null;
         this.board = board;
+        this.filhos=new LinkedList<Node>();
     }
-
+    public Node (Node father, int[] board){
+    	this.father=father;
+    	this.board=board.clone();
+    	this.nivel = father.nivel + 1;
+        this.jogada = father.jogada == 1 ? 2 : 1; 
+        this.filhos=new LinkedList<Node>();
+    	this.setHeuristica();
+    }
+    /*
+     * autor: vanderson
+     * metodo que insere na lista de filhos do node
+     * parametros: {Node}
+     */
+    public void insertFilhos(Node x){
+    	filhos.add(x);
+    	return;
+    }
     /*
      * set e get
      */
+    /*
+     * autor: vanderson
+     * metodo que devolve a lista de filhos 
+     * parametros: {void}
+     * return {List<Node>}
+     */
+    public Node getFilho(){
+    	if(!this.filhos.isEmpty()){
+    	return filhos.remove(0);
+    	}
+    	return null;
+    }
     public int[] getBoard() {
         return this.board;
     }
@@ -42,12 +76,14 @@ public class Node {
     public int getNivel(){
         return this.nivel;
     }
-    
+    public void setHeuristica(){
+    	int x = functionAval(this.jogada);
+        int y = functionAval(this.jogada == 1 ? 2 : 1);
+        heuristica = x-y;
+        return;
+    }
     public int getHeristica(){
-         int x = functionAval(this.jogada);
-         int y = functionAval(this.jogada == 1 ? 2 : 1);
-         heuristica = x-y;
-        return this.heuristica;
+         return this.heuristica;
     }
     
        
@@ -55,9 +91,9 @@ public class Node {
         int i,cont=0;
         for (i = 0; i < 8; i++) {
             if (i == 0 || i == 3 || i == 6) {  //avalia linhas
-                if (this.board[i] == jogada || this.board[i]==' ') {
-                   if (this.board[i + 1] == jogada || this.board[i+1]==' ') {
-                        if (this.board[i + 2] != jogada || this.board[i +2] ==' ') {
+                if (this.board[i] == jogada || this.board[i]==0) {
+                   if (this.board[i + 1] == jogada || this.board[i+1]==0) {
+                        if (this.board[i + 2] == jogada || this.board[i +2] ==0) {
                             cont++;
                         }
                     }
@@ -66,9 +102,9 @@ public class Node {
             }
             
             if(i==0 || i==1 || i==2){    //avalia as colunas
-               if (this.board[i] == jogada || this.board[i]==' ') {
-                   if (this.board[i + 3] == jogada || this.board[i+3]==' ') {
-                        if (this.board[i + 6] != jogada || this.board[i +6] ==' ') {
+               if (this.board[i] == jogada || this.board[i]==0) {
+                   if (this.board[i + 3] == jogada || this.board[i+3]==0) {
+                        if (this.board[i + 6] == jogada || this.board[i +6] ==0) {
                             cont++;
                         }
                     }
@@ -76,16 +112,16 @@ public class Node {
             }
             
             if(i==6 || i == 7){    //avalia as diagonais
-                if (this.board[4] == jogada || this.board[4] == ' ') {
-                  if(i==6){
-                     if (this.board[0] == jogada || this.board[0] == ' ') {
-                       if (this.board[8] == jogada || this.board[8] == ' ') {
+                if (this.board[4] == jogada || this.board[4] == 0) {
+                  if(i==6){//avalia principal
+                     if (this.board[0] == jogada || this.board[0] == 0) {
+                       if (this.board[8] == jogada || this.board[8] == 0) {
                             cont++;
                        }
                      }
-                  }else {
-                         if (this.board[2] == jogada || this.board[0] == ' ') {
-                          if (this.board[0] == jogada || this.board[0] == ' '){   
+                  }else {//avalia secundaria
+                         if (this.board[2] == jogada || this.board[0] == 0) {
+                          if (this.board[6] == jogada || this.board[6] == 0){   
                             cont++;
                         }
                     }
@@ -102,7 +138,7 @@ public class Node {
 //avalia qual jogador ganhou: 1 = X ou 2 = O
     public int ganhou() {
         int jogGanho = 0;
-        int i, cont = 0;
+        int i,vazio=0, cont = 0;
         for (i = 0; i < 8; i++) {
             if (i == 0 || i == 3 || i == 6) {  //avalia linhas
                 if ((this.board[i] == this.board[i + 1]) && (this.board[i + 1] == this.board[i + 2])) {
@@ -125,7 +161,14 @@ public class Node {
                     jogGanho = this.board[4];
                 }
             }
+            if(board[i]==0){//conta os vazios
+            	vazio++;
+            }
         }
-        return jogGanho;
+        if(vazio==0){//testa empate
+        	return -1;
+        }else{
+        	return jogGanho;
+        }
     }
 }

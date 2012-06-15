@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package trab_ia_jogovelha;
+package iaVelha;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,8 @@ import java.util.List;
  */
 public class CorteAB {
 	private JogoVelha jogada;
-    private Node estadoAtual,estadoFinal;
+    private Node estadoAtual;
+    private static Node resultado;
     private int alfa,beta,avaliacao;
     private List<Node> filhos;
     private int jogador;
@@ -24,6 +25,7 @@ public class CorteAB {
     	this.estadoAtual=estado;
     	this.filhos= new LinkedList<Node>();
     	this.jogador=jogador;
+    	this.resultado=null;
     	 	
     	
     	
@@ -31,35 +33,45 @@ public class CorteAB {
     public int getAvaliacao(){
     	return this.avaliacao;
     }
-    public Node goal(){
-    	return estadoFinal;
+  
+    public Node getResultado(){
+    	return resultado;
     }
     
     public int run(){
-    	if (this.estadoAtual.ganhou()>0 || this.estadoAtual.equals(this.estadoFinal)){
-    		this.estadoFinal=estadoAtual;
-    		return 0;
-    		///this.estadoAtual(); devolve o atual
-    		//return ;
-    	}
+    	if (this.estadoAtual.ganhou()>0 || this.estadoAtual.ganhou()==-1){
+    		if(resultado==null){
+    			resultado=estadoAtual;
+    		}
+    		return resultado.getHeristica();
+      	}
     	CorteAB jogar;
-    	this.estadoAtual.geraFilhos();// fazer algo para gerar od filhos do nodo.
+    	Node aux;
+    	for( aux=this.estadoAtual.getFilho();aux!=null;aux=this.estadoAtual.getFilho()){
+    		this.filhos.add(aux);// pega uma lista com os filhos do Node
+    	}
+    	
     	if(this.jogador==1){
+    		
     		while(!this.filhos.isEmpty()){
-    			jogar = new CorteAB(1,this.filhos.remove(0),alfa,beta);
+    			jogar = new CorteAB(2,this.filhos.remove(0),alfa,beta);
+    			
     			avaliacao = jogar.run();
     			if(avaliacao > alfa){
     				alfa = avaliacao;
     			}
+    			
     		}
     		return alfa;		
     	}
-    	if(this.jogador==1){
+    	if(this.jogador==2){
     		while(!this.filhos.isEmpty()){
+    			
     			jogar = new CorteAB(1,this.filhos.remove(0),alfa,beta);
+    			
     			avaliacao = jogar.run();
     			if(avaliacao < beta){
-    				alfa = avaliacao;
+    				beta = avaliacao;
     			}
     		}
     		return beta;		

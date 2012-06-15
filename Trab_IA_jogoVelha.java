@@ -1,4 +1,4 @@
-package trab_ia_jogovelha;
+package iaVelha;
 
 /*
  * To change this template, choose Tools | Templates
@@ -19,12 +19,18 @@ public class Trab_IA_jogoVelha {
      */
     public static void main(String[] args) {
         
-        JFrame window = new JFrame("TIC - TAC - TOE");
+       /*
+    	JFrame window = new JFrame("TIC - TAC - TOE");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(new JogoVelhaUI());
         window.pack();  
         window.show();  
         window.setResizable(false);
+        */
 	// TODO code application logic here
+    	JogoVelha game=new JogoVelha();
+    	game.CorteAB();
+    	game.getResultado();
+    	
     }
 }
