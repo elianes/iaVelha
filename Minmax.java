@@ -12,7 +12,7 @@ import java.util.List;
  * @author eliane
  */
 public class Minmax {
-    private List<Node> sucessores;  //lista de filhos do estado
+    public List<Node> sucessores;  //lista de filhos do estado
     private JogoVelha jogada;
     private Node jogadaCerta;
     
@@ -20,7 +20,14 @@ public class Minmax {
 		this.sucessores = new LinkedList<Node>();
 		sucessores.add(estado);
     }
+
+    Minmax() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
     
+    public Node getJogadaCerta(){
+        return this.jogadaCerta;
+    }
     public void minMax(Node estado){
        
         while(!sucessores.isEmpty()){
@@ -33,7 +40,7 @@ public class Minmax {
    
     }
 
-    private void maximoSuc() {
+    public void maximoSuc() {
         int maior, index;
         maior = sucessores.get(0).getHeristica();
         index=0;
@@ -46,7 +53,7 @@ public class Minmax {
         jogadaCerta =sucessores.get(index);
     }
 
-    private void minimoSuc() {
+    public void minimoSuc() {
           int menor, index;
         menor = sucessores.get(0).getHeristica();
         index=0;

@@ -15,8 +15,11 @@ import javax.swing.*;
  */
 public class JogoVelhaUI extends JPanel {
 
-    private int entrada[] = new int[8];
+    private int entrada[] = new int[9];
     private static JogoVelha velha;
+    private static JogoVelha jogoVelha;
+    private int disputa; //para saber se é pc X pc ou jogador X pc 
+    
     private Node node;
     private GraphicsPanel jogoVelhaBoardUI;
     private JogoVelhaModel jogoVelhaModel;
@@ -32,15 +35,18 @@ public class JogoVelhaUI extends JPanel {
     private JTextField text;
 
     public JogoVelhaUI() {
+             
         velha = new JogoVelha();
-       
+        jogoVelha = new JogoVelha();
+
         jogoVelhaModel = new JogoVelhaModel();
 
         jogadorXpc = new JButton("Jogador X PC");
         jogadorXpc.addActionListener(new JogadorXpc());
-
+       
         pcXpc = new JButton("PC X PC");
         pcXpc.addActionListener(new PcXPc());
+        
 
         minmax = new JButton("MinMax");
         minmax.addActionListener(new MinmaxExc());
@@ -110,6 +116,11 @@ public class JogoVelhaUI extends JPanel {
         }
 
         public void mousePressed(MouseEvent e) {
+            
+        }
+
+        public void mouseClicked(MouseEvent e) {
+             
             int col = e.getX() / CELL_SIZE;
             int row = e.getY() / CELL_SIZE;
             if (!jogoVelhaModel.moveTile(row, col)) {
@@ -117,9 +128,9 @@ public class JogoVelhaUI extends JPanel {
             }
             this.repaint();
         }
-
-        public void mouseClicked(MouseEvent e) {
-        }
+            
+            
+        
 
         public void mouseReleased(MouseEvent e) {
         }
@@ -129,7 +140,7 @@ public class JogoVelhaUI extends JPanel {
 
         public void mouseExited(MouseEvent e) {
         }
-    }
+}
 
     /*
      * Botões de ação do jogo
@@ -137,39 +148,47 @@ public class JogoVelhaUI extends JPanel {
     public class MinmaxExc implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-            velha.geraArvore();
-            label.setText("Marque uma posição");
-            if(entrada != null){
+             
+           velha.geraArvore();
+           jogoVelha.setBoard(entrada);
+            
+           if(jogoVelha.getDisputa() == 1){
                
-            }
+           }else{
+               
+           }
+            
+            
+            
+           
         }
     }
 
-
-public class JogadorXpc implements ActionListener {
-
-    public void actionPerformed(ActionEvent e) {
-          
+    public class JogadorXpc implements ActionListener {
+     
+        public void actionPerformed(ActionEvent e) {
+              
+               jogoVelha.setDisputa(1);
+        }
     }
-}
 
-public class PcXPc implements ActionListener {
+    public class PcXPc implements ActionListener {
 
-    public void actionPerformed(ActionEvent e) {
-          
+        public void actionPerformed(ActionEvent e) {
+              jogoVelha.setDisputa(2);
+        }
+        
     }
-}
 
+    public class MinmaxCLimiteExc implements ActionListener {
 
-public class MinmaxCLimiteExc implements ActionListener {
-
-    public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
+        }
     }
-}
 
-public class CorteABExc implements ActionListener {
+    public class CorteABExc implements ActionListener {
 
-    public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) {
+        }
     }
-}
 }

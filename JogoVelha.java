@@ -4,6 +4,8 @@
  */
 package trab_ia_jogovelha;
 
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -12,109 +14,91 @@ import java.util.Queue;
  */
 public class JogoVelha {
 
-    private int[] board = new int[8];
+    private int[] board = new int[9];
     private Queue<Node> fifo;
-    private Node father;
-    
-   private int heuristica = 0;
-    private int nivel = 0;
     private int jogador;   //jogador 1 = X e o jogador 2 = O
     private int adversario;
-    
+    private int disputa;
 
-    
-     public int getJogador(){
-        return this.jogador;
-    }
-     
-     public int[] getBoard(){
-         return this.board;
-     }
-     
-  
-    public void geraArvore() {
-        Node next;
-        Node newNode;
-        int jogaAgora = 1;
-        int jogaDepois = 2;
-        int ganhou;
-        do {
-            this.nivel++;
-            this.jogador = jogaAgora;
-            this.adversario = jogaDepois;
-            geraFilhos(this.father);
-            jogaAgora = this.adversario;
-            jogaDepois = this.jogador;
-           
-        } while (true);
+    public void setjogador(int jog) {
+        this.jogador = jog;
     }
 
-    private void geraFilhos(Node father) {
-        Node newFilho;
-        int ganhou = 0;
-        for (int i = 0; i <= 8; i++) {
-            if (board[i] == ' ') {
-                board[i] = jogador;  //1 ou 2 = X ou O
-                int x = functionAval(this.jogador);
-                int y = functionAval(this.adversario);
-                heuristica = x-y;
-                newFilho = new Node(board, nivel, heuristica);
-                fifo.add(newFilho);
-                
-
-            }
-
-        }
+    public void setBoard(int[] board) {
+        this.board = board;
+    }
+    
+     void setDisputa(int i) {
+        this.disputa = i;
         
     }
-    
-
-
-    private int functionAval(int jogada) {
-        int i,cont=0;
-        for (i = 0; i < 8; i++) {
-            if (i == 0 || i == 3 || i == 6) {  //avalia linhas
-                if (this.board[i] == jogada || this.board[i]==' ') {
-                   if (this.board[i + 1] == jogada || this.board[i+1]==' ') {
-                        if (this.board[i + 2] != jogada || this.board[i +2] ==' ') {
-                            cont++;
-                        }
-                    }
-                }
-               
-            }
-            
-            if(i==0 || i==1 || i==2){    //avalia as colunas
-               if (this.board[i] == jogada || this.board[i]==' ') {
-                   if (this.board[i + 3] == jogada || this.board[i+3]==' ') {
-                        if (this.board[i + 6] != jogada || this.board[i +6] ==' ') {
-                            cont++;
-                        }
-                    }
-                }
-            }
-            
-            if(i==6 || i == 7){    //avalia as diagonais
-                if (this.board[4] == jogada || this.board[4] == ' ') {
-                  if(i==6){
-                     if (this.board[0] == jogada || this.board[0] == ' ') {
-                       if (this.board[8] == jogada || this.board[8] == ' ') {
-                            cont++;
-                       }
-                     }
-                  }else {
-                         if (this.board[2] == jogada || this.board[0] == ' ') {
-                          if (this.board[0] == jogada || this.board[0] == ' '){   
-                            cont++;
-                        }
-                    }
-                }
-            }
-            } 
-
-        }
-        return cont;
+     
+    public int getDisputa(){
+        return this.disputa;
     }
 
-    
+    public int getJogador() {
+        return this.jogador;
+    }
+
+    public int[] getBoard() {
+        return this.board;
+    }
+
+    /*
+     * public void geraArvore() { Node next; Node newNode;
+     *
+     * int jogaAgora = 1; int jogaDepois = 2; int ganhou; do { this.nivel++;
+     * this.jogador = jogaAgora; this.adversario = jogaDepois;
+     * geraFilhos(this.father); jogaAgora = this.adversario; jogaDepois =
+     * this.jogador;
+     *
+     * } while (true); }
+     */
+    public void geraArvore() {
+        Node newFilho, father;
+        int[] boardInicial = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        father = new Node(boardInicial);
+        int cont = 0;
+        int jogador = 1;
+        int nivel;
+        this.fifo = new LinkedList<Node>();
+  
+        do {
+            for (int i = 0; i <= 8; i++) {
+                if (board[i] == 0) {
+                    board[i] = jogador;  //1 ou 2 = X ou O
+                    newFilho = new Node(father);
+                    fifo.add(newFilho);
+                    cont++;
+                    System.out.println("acrescentou um filho");
+                }
+            }
+             System.out.println("saui do for");
+            nivel = father.getNivel();
+            father = this.fifo.remove();
+            if (father != null) {   
+                if (nivel != father.getNivel()) {  //no proximo nivel será trocado de jogador
+                    jogador = jogador == 1 ? 2 : 1;
+                }
+            }
+        } while (this.fifo != null);
+
+    }
+
+    public void encontreNode(int[] board) {
+    }
+
+    public void minMax() {
+    }
+
+    public void printBoard() {
+        for (int i = 0; i < 9; i += 3) {
+            System.out.println(board[i] + "  " + board[i + 1] + "  "
+                    + board[i + 2]);
+        }
+        System.out.println(".......");
+    }
+
+   
 }
