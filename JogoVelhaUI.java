@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package trab_ia_jogovelha;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -103,7 +103,7 @@ public class JogoVelhaUI extends JPanel {
                 for (int c = 0; c < COLS; c++) {
                     int x = c * CELL_SIZE;
                     int y = r * CELL_SIZE;
-                    //String text = jogoVelhaModel.getFace(r, c);
+                    String text = jogoVelhaModel.getFace(r, c);
                     if (text != null) {
                         g.setColor(Color.white);
                         g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
@@ -123,9 +123,7 @@ public class JogoVelhaUI extends JPanel {
              
             int col = e.getX() / CELL_SIZE;
             int row = e.getY() / CELL_SIZE;
-            if (!jogoVelhaModel.moveTile(row, col)) {
-                Toolkit.getDefaultToolkit().beep();
-            }
+           
             this.repaint();
         }
             
@@ -148,20 +146,23 @@ public class JogoVelhaUI extends JPanel {
     public class MinmaxExc implements ActionListener {
 
         public void actionPerformed(ActionEvent e) {
-             
-           velha.geraArvore();
-           jogoVelha.setBoard(entrada);
-            
-           if(jogoVelha.getDisputa() == 1){
-               
-           }else{
-               
-           }
-            
-            
-            
+            //entrada pega o quadro atual
            
-        }
+           Node saida;            
+          velha.minMax( velha.geraArvore());
+            //game.getResultado();
+           velha.getEstadoFinal().printBoard();
+          
+         while(true){
+              velha.minMax(velha.getEstadoFinal());
+              velha.getEstadoFinal().printBoard(); 
+         }
+           
+            
+            
+    }   
+           
+        
     }
 
     public class JogadorXpc implements ActionListener {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package iaVelha;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,59 +12,73 @@ import java.util.List;
  * @author eliane
  */
 public class Minmax {
-    public List<Node> sucessores;  //lista de filhos do estado
-    private JogoVelha jogada;
+
+    public List<Node> filhos;  //lista de filhos do estado
     private Node jogadaCerta;
-    
-    public Minmax(Node estado){
-		this.sucessores = new LinkedList<Node>();
-		sucessores.add(estado);
+    private Node entrada;
+    private Node filho;
+
+    public Minmax(Node entrada) {
+        this.entrada = entrada;
+        //this.filhos = new LinkedList<Node>();
     }
 
-    Minmax() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-    
-    public Node getJogadaCerta(){
+    public Node getJogadaCerta() {
         return this.jogadaCerta;
     }
-    public void minMax(Node estado){
+
+    public void run() {
+
+        int maior = -1000;
+        Node maiorNode;
+        this.filhos = this.entrada.getListaFilhos();
+        int i = 0;
+        if(this.filhos.isEmpty())
+           return;
+        maiorNode = this.entrada;
+        for(i=0;i<filhos.size();i++) {
+            this.filho = this.filhos.get(i);
+//System.out.println("minmax");
+            //this.filho.printBoard();
+            int x = menorSuc();
+            System.out.println("menor = " + x + "jogada =" + this.filho.getJogada() );
+            if (x > maior) {
+                maiorNode = this.filho;
+                maior=x;
+            }
+        }
+        System.out.println("maior node");
+        maiorNode.printBoard();
+        this.jogadaCerta = maiorNode;
+    }
+
+    public int menorSuc() {
        
-        while(!sucessores.isEmpty()){
-            if(jogada.getJogador() == 1){
-              maximoSuc();
-            }else{
-              minimoSuc();
+        List<Node> netos;
+        Node neto, aux;
+        
+        netos = this.filho.getListaFilhos();
+        
+       
+        int i = 0;
+        int menor = 10;
+        for(i=0;i<netos.size();i++) {
+            neto = netos.get(i);
+  //          System.out.println("neto");
+    //        neto.printBoard();
+            if (neto.getHeristica() < menor) {
+                menor = neto.getHeristica();
+                //this.filho = neto;
             }
-        }
-   
-    }
-
-    public void maximoSuc() {
-        int maior, index;
-        maior = sucessores.get(0).getHeristica();
-        index=0;
-        for(int i=1; i<sucessores.size();i++){
-            if(sucessores.get(i).getHeristica()>maior){
-                maior =  sucessores.get(0).getHeristica();
-                index=i;
+            
+            if(neto.ganhou()==neto.getJogada()){
+               menor =  -100;
+               
             }
+            System.out.println("jogada do neto = " + neto.getJogada());
+           
         }
-        jogadaCerta =sucessores.get(index);
+      
+        return menor;
     }
-
-    public void minimoSuc() {
-          int menor, index;
-        menor = sucessores.get(0).getHeristica();
-        index=0;
-        for(int i=1; i<sucessores.size();i++){
-            if(sucessores.get(i).getHeristica()<menor){
-                menor =  sucessores.get(0).getHeristica();
-                index=i;
-            }
-        }
-        jogadaCerta =sucessores.get(index);
-    }
-			
-		
 }

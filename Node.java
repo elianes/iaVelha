@@ -1,4 +1,4 @@
-package iaVelha;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Node {
     private Node father;
     private int heuristica = 0;
     private int nivel =0;
-    private int jogada=1;
+    private int jogada=0;   //é igual ao 1 = X ou 2 = O
     private List<Node> filhos=null;
  
 
@@ -59,12 +59,25 @@ public class Node {
      * parametros: {void}
      * return {List<Node>}
      */
+     public void printBoard() {
+        for (int i = 0; i < 9; i += 3) {
+            System.out.println(board[i] + "  " + board[i + 1] + "  "
+                    + board[i + 2]);
+        }
+        System.out.println(".......");
+    }
+    
     public Node getFilho(){
-    	if(!this.filhos.isEmpty()){
+        if(!this.filhos.isEmpty()){
     	return filhos.remove(0);
     	}
     	return null;
     }
+    
+    public List<Node> getListaFilhos(){
+        return this.filhos;
+    }
+    
     public int[] getBoard() {
         return this.board;
     }
@@ -76,10 +89,17 @@ public class Node {
     public int getNivel(){
         return this.nivel;
     }
+    
+    public int getJogada(){
+        return this.jogada;
+    }
+    
     public void setHeuristica(){
     	int x = functionAval(this.jogada);
         int y = functionAval(this.jogada == 1 ? 2 : 1);
-        heuristica = x-y;
+        heuristica = y-x;
+               
+       // System.out.println("heuristica = " + heuristica);
         return;
     }
     public int getHeristica(){
@@ -120,7 +140,7 @@ public class Node {
                        }
                      }
                   }else {//avalia secundaria
-                         if (this.board[2] == jogada || this.board[0] == 0) {
+                         if (this.board[2] == jogada || this.board[2] == 0) {
                           if (this.board[6] == jogada || this.board[6] == 0){   
                             cont++;
                         }
