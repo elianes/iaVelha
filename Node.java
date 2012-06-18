@@ -1,4 +1,4 @@
-
+package servidor.iaVelha;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class Node {
 
     private int[] board = new int[9];
-    private Node father;
+    private Node father,melhorJogada;
     private int heuristica = 0;
     private int nivel =0;
-    private int jogada=0;   //é igual ao 1 = X ou 2 = O
+    private int jogada;
     private List<Node> filhos=null;
  
 
@@ -26,12 +26,37 @@ public class Node {
         this.jogada = father.jogada == 1 ? 2 : 1; 
         this.filhos=new LinkedList<Node>();
         
+        
     }
-
+    public Node findFilho(int []oard){
+    	Node aux;
+    	for(int i=0;i<filhos.size();i++){
+    		aux=this.filhos.get(i);
+    		if(aux.getBoard().equals(oard)){
+    			return aux;
+    		}
+    	}
+    	return null;
+    }
+    public int getJogada(){
+    	return this.jogada;
+    }
+    public void setMelhorJogada(Node x){
+    	this.melhorJogada=x;
+    }
+    public void setJogada(int x){
+    	this.jogada=x;
+    	
+    }
+    public List<Node> getListaFilhos(){
+        return this.filhos;
+    }
+    
     public Node(int[] board) {
     	this.father=null;
         this.board = board;
         this.filhos=new LinkedList<Node>();
+        this.jogada = 1; 
     }
     public Node (Node father, int[] board){
     	this.father=father;
@@ -39,7 +64,8 @@ public class Node {
     	this.nivel = father.nivel + 1;
         this.jogada = father.jogada == 1 ? 2 : 1; 
         this.filhos=new LinkedList<Node>();
-    	this.setHeuristica();
+        calculaHeuristica();
+    	
     }
     /*
      * autor: vanderson
@@ -59,51 +85,52 @@ public class Node {
      * parametros: {void}
      * return {List<Node>}
      */
-     public void printBoard() {
-        for (int i = 0; i < 9; i += 3) {
-            System.out.println(board[i] + "  " + board[i + 1] + "  "
-                    + board[i + 2]);
-        }
-        System.out.println(".......");
-    }
-    
     public Node getFilho(){
-        if(!this.filhos.isEmpty()){
+    	if(!this.filhos.isEmpty()){
     	return filhos.remove(0);
     	}
     	return null;
     }
-    
-    public List<Node> getListaFilhos(){
-        return this.filhos;
+    public Node getFilho(int i){
+    	if(!this.filhos.isEmpty()){
+    	return filhos.get(i);
+    	}
+    	return null;
     }
-    
+    public boolean filhosIsNull(){
+    	if (this.filhos.isEmpty())
+    		return true;
+    	return false;
+    }
+    public int getNumFilhos(){
+		return this.filhos.size();
+	}
     public int[] getBoard() {
         return this.board;
     }
 
     public Node getFather() {
+ 
         return this.father;
     }
     
     public int getNivel(){
         return this.nivel;
     }
-    
-    public int getJogada(){
-        return this.jogada;
-    }
-    
-    public void setHeuristica(){
-    	int x = functionAval(this.jogada);
-        int y = functionAval(this.jogada == 1 ? 2 : 1);
-        heuristica = y-x;
-               
-       // System.out.println("heuristica = " + heuristica);
+    public void setHeuristica(int x){
+    	this.heuristica=x;
         return;
     }
     public int getHeristica(){
-         return this.heuristica;
+    	return heuristica;
+    }
+    
+    public void calculaHeuristica(){
+    	int x = functionAval(this.jogada);
+    	int y = functionAval(this.jogada == 1 ? 2 : 1);
+ 
+        heuristica = x-y;
+    	
     }
     
        
@@ -152,6 +179,7 @@ public class Node {
         }
         return cont;
     }
+   
   
     
     
@@ -190,5 +218,17 @@ public class Node {
         }else{
         	return jogGanho;
         }
+    }
+	public Node getMelhorjogada() {
+		
+		return this.melhorJogada;
+	}
+	//debugers
+    public void printBoard() {
+        for (int i = 0; i < 9; i += 3) {
+            System.out.println(board[i] + "  " + board[i + 1] + "  "
+                    + board[i + 2]);
+        }
+        System.out.println(".......");
     }
 }

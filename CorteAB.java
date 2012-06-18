@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+package iaVelha;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,23 +12,15 @@ import java.util.List;
  * @author eliane
  */
 public class CorteAB {
-    private JogoVelha jogada;
-    private Node estadoAtual;
     private static Node resultado;
-    private int alfa,beta,avaliacao;
-    private List<Node> filhos;
-    private int jogador;
+    private int avaliacao;
+    private int visitados;
     
-    public CorteAB(int jogador, Node estado,int alf,int bet){
-    	this.alfa=alf;
-    	this.beta=bet;
-    	this.estadoAtual=estado;
-    	this.filhos= new LinkedList<Node>();
-    	this.jogador=jogador;
-    	this.resultado=null;
-    	 	
-    	
-    	
+    public CorteAB(){
+    	visitados=0;
+    }
+    public int getVisitados(){
+    	return this.visitados;
     }
     public int getAvaliacao(){
     	return this.avaliacao;
@@ -37,51 +29,68 @@ public class CorteAB {
     public Node getResultado(){
     	return resultado;
     }
-    
-    public int run(){
-    	if (this.estadoAtual.ganhou()>0 || this.estadoAtual.ganhou()==-1){
-    		if(resultado==null){
-    			resultado=estadoAtual;
-    		}
-    		return resultado.getHeristica();
-      	}
-    	CorteAB jogar;
-    	Node aux;
-    	for( aux=this.estadoAtual.getFilho();aux!=null;aux=this.estadoAtual.getFilho()){
-    		this.filhos.add(aux);// pega uma lista com os filhos do Node
-    	}
-    	
-    	if(this.jogador==1){
-    		
-    		while(!this.filhos.isEmpty()){
-    			jogar = new CorteAB(2,this.filhos.remove(0),alfa,beta);
-    			
-    			avaliacao = jogar.run();
-    			if(avaliacao > alfa){
-    				alfa = avaliacao;
-    			}
-    			
-    		}
-    		return alfa;		
-    	}
-    	if(this.jogador==2){
-    		while(!this.filhos.isEmpty()){
-    			
-    			jogar = new CorteAB(1,this.filhos.remove(0),alfa,beta);
-    			
-    			avaliacao = jogar.run();
-    			if(avaliacao < beta){
-    				beta = avaliacao;
-    			}
-    		}
-    		return beta;		
-    	}
-    	return 0;
-     }
-    public Node getEstadoAtual(){
-    	return this.estadoAtual;
+    public valorRetorno run(Node estado, int jogador, int alpha, int beta){
+    	valorRetorno a=null;
+    	Node aux=null;
+        int i=0;
+        if(estado.filhosIsNull()){
+        	return this.getHeristica(estado);
+        }
+        for (; i<9 ;i++) {
+        	if(!estado.filhosIsNull()&&estado.getNumFilhos()>i){
+        		aux=estado.getFilho(i);
+        		int x=(-1)*beta;
+        		int y=(-1)*alpha;
+        		valorRetorno b = run(aux,jogador ,x,y);
+        		b.setHeuristica(b.getHeristica()*(-1));
+                visitados++;
+            	if(jogador==1){
+            		if (a==null || a.getHeristica() < b.getHeristica()){
+            			a=b;
+                        a.setEstado(estado.getFilho(i));
+                        alpha=a.getHeristica();	
+            		}
+            	}else{
+            		if (a==null || a.getHeristica() > b.getHeristica()){
+            			a=b;
+                        a.setEstado(estado.getFilho(i));
+                       alpha=a.getHeristica();	
+            		}
+            	}
+            if (beta<=alpha)
+              i=9;
+          }
+        }
+        return a;
     }
-    
+
+    private valorRetorno getHeristica(Node estado) {
+    		valorRetorno a=new valorRetorno();
+    		  int tmp=estado.ganhou();
+    		  if (tmp == estado.getJogada()){
+    		    a.setHeuristica(Integer.MAX_VALUE);
+    		  }
+    		  else if (tmp == (estado.getJogada()== 1 ? 2 : 1)){
+    		    a.setHeuristica(Integer.MIN_VALUE);
+    		  }
+    		  else{
+    		    a.setHeuristica((-1)*estado.getHeristica());
+    		  }
+    		  a.setEstado(estado);
+    		  a.setFather(estado);
+    		  return a;
+    		}
+    		 
+    /*autor vanderson
+     * debugers 
+     */
+    public void printBoard(int[] x) {
+        for (int i = 0; i < 9; i += 3) {
+            System.out.println(x[i] + "  " + x[i + 1] + "  "
+                    + x[i + 2]);
+        }
+        System.out.println(".......");
+    }
    
    
 }
