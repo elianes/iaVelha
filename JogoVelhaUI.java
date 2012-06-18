@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -15,181 +14,191 @@ import javax.swing.*;
  */
 public class JogoVelhaUI extends JPanel {
 
-    private int entrada[] = new int[9];
-    private static JogoVelha velha;
-    private static JogoVelha jogoVelha;
-    private int disputa; //para saber se é pc X pc ou jogador X pc 
-    
-    private Node node;
-    private GraphicsPanel jogoVelhaBoardUI;
-    private JogoVelhaModel jogoVelhaModel;
-    private static int indexStep;
-    private ArrayList<Node> result;
-    private JPanel controlPanel;
-    private JButton jogadorXpc;
-    private JButton pcXpc;
-    private JButton minmax;
-    private JButton minmaxCLimite;
-    private JButton corteAB;
-    private JLabel label;
-    private JTextField text;
+	private int entrada[] = new int[9];
+	private static JogoVelha velha;
+	private static JogoVelha jogoVelha;
+	private int disputa; // para saber se é pc X pc ou jogador X pc
 
-    public JogoVelhaUI() {
-             
-        velha = new JogoVelha();
-        jogoVelha = new JogoVelha();
+	private Node node;
+	private GraphicsPanel jogoVelhaBoardUI;
+	private JogoVelhaModel jogoVelhaModel;
+	private static int indexStep;
+	private ArrayList<Node> result;
+	private JPanel controlPanel;
+	private JButton jogadorXpc;
+	private JButton pcXpc;
+	private JButton minmax;
+	private JButton minmaxCLimite;
+	private JButton corteAB;
+	private JLabel label;
+	private JTextField text;
 
-        jogoVelhaModel = new JogoVelhaModel();
+	public JogoVelhaUI() {
 
-        jogadorXpc = new JButton("Jogador X PC");
-        jogadorXpc.addActionListener(new JogadorXpc());
-       
-        pcXpc = new JButton("PC X PC");
-        pcXpc.addActionListener(new PcXPc());
-        
+		velha = new JogoVelha();
+		jogoVelha = new JogoVelha();
 
-        minmax = new JButton("MinMax");
-        minmax.addActionListener(new MinmaxExc());
+		jogoVelhaModel = new JogoVelhaModel();
 
-        minmaxCLimite = new JButton("Minmax com limite");
-        minmaxCLimite.addActionListener(new MinmaxCLimiteExc());
+		jogadorXpc = new JButton("Jogador X PC");
+		jogadorXpc.addActionListener(new JogadorXpc());
 
-        corteAB = new JButton("Corte alfa-beta");
-        corteAB.addActionListener(new CorteABExc());
+		pcXpc = new JButton("PC X PC");
+		pcXpc.addActionListener(new PcXPc());
 
+		minmax = new JButton("MinMax");
+		minmax.addActionListener(new MinmaxExc());
 
-        label = new JLabel("Selecione qual o algoritmo e quem vai jogar");
+		minmaxCLimite = new JButton("Minmax com limite");
+		minmaxCLimite.addActionListener(new MinmaxCLimiteExc());
 
-        text = new JTextField();
+		corteAB = new JButton("Corte alfa-beta");
+		corteAB.addActionListener(new CorteABExc());
 
-        controlPanel = new JPanel();
-        controlPanel.setLayout(new GridLayout(6, 2));
+		label = new JLabel("Selecione qual o algoritmo e quem vai jogar");
 
-        controlPanel.add(jogadorXpc);
-        controlPanel.add(pcXpc);
-        controlPanel.add(minmax);
-        controlPanel.add(minmaxCLimite);
-        controlPanel.add(corteAB);
-        controlPanel.add(text);
+		text = new JTextField();
 
-        jogoVelhaBoardUI = new GraphicsPanel();
+		controlPanel = new JPanel();
+		controlPanel.setLayout(new GridLayout(6, 2));
 
-        this.setLayout(new BorderLayout());
-        this.add(controlPanel, BorderLayout.WEST);
+		controlPanel.add(jogadorXpc);
+		controlPanel.add(pcXpc);
+		controlPanel.add(minmax);
+		controlPanel.add(minmaxCLimite);
+		controlPanel.add(corteAB);
+		controlPanel.add(text);
 
-        this.add(jogoVelhaBoardUI, BorderLayout.EAST);
-        this.add(label, BorderLayout.SOUTH);
+		jogoVelhaBoardUI = new GraphicsPanel();
 
-    }
+		this.setLayout(new BorderLayout());
+		this.add(controlPanel, BorderLayout.WEST);
 
-    public class GraphicsPanel extends JPanel implements MouseListener {
+		this.add(jogoVelhaBoardUI, BorderLayout.EAST);
+		this.add(label, BorderLayout.SOUTH);
 
-        private static final int ROWS = 3;
-        private static final int COLS = 3;
-        private static final int CELL_SIZE = 60;
-        private Font _biggerFont;
+	}
 
-        public GraphicsPanel() {
-            _biggerFont = new Font("SansSerif", Font.BOLD, CELL_SIZE / 2);
-            this.setPreferredSize(new Dimension(CELL_SIZE * COLS, CELL_SIZE
-                    * ROWS));
-            this.setBackground(Color.black);
-            this.addMouseListener(this);
-        }
+	public class GraphicsPanel extends JPanel implements MouseListener {
 
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            for (int r = 0; r < ROWS; r++) {
-                for (int c = 0; c < COLS; c++) {
-                    int x = c * CELL_SIZE;
-                    int y = r * CELL_SIZE;
-                    String text = jogoVelhaModel.getFace(r, c);
-                    if (text != null) {
-                        g.setColor(Color.white);
-                        g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
-                        g.setColor(Color.black);
-                        g.setFont(_biggerFont);
-                        //g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
-                    }
-                }
-            }
-        }
+		private static final int ROWS = 3;
+		private static final int COLS = 3;
+		private static final int CELL_SIZE = 60;
+		private Font _biggerFont;
 
-        public void mousePressed(MouseEvent e) {
-            
-        }
+		public GraphicsPanel() {
+			_biggerFont = new Font("Monospaced", Font.BOLD, CELL_SIZE / 2);
+			this.setPreferredSize(new Dimension(CELL_SIZE * COLS, CELL_SIZE
+					* ROWS));
+			this.setBackground(Color.black);
+			this.addMouseListener(this);
+		}
 
-        public void mouseClicked(MouseEvent e) {
-             
-            int col = e.getX() / CELL_SIZE;
-            int row = e.getY() / CELL_SIZE;
-           
-            this.repaint();
-        }
-            
-            
-        
+		public void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			for (int r = 0; r < ROWS; r++) {
+				for (int c = 0; c < COLS; c++) {
+					int x = c * CELL_SIZE;
+					int y = r * CELL_SIZE;
+					String text = jogoVelhaModel.getFace(r, c);
 
-        public void mouseReleased(MouseEvent e) {
-        }
+					if (text != null) {
+						g.setColor(Color.white);
+						g.fillRect(x + 2, y + 2, CELL_SIZE - 4, CELL_SIZE - 4);
+						if (text.equals("X")) {
+							g.setColor(Color.blue);
+						} else {
+							g.setColor(Color.red);
+						}
+						g.setFont(_biggerFont);
+						g.drawString(text, x + 20, y + (3 * CELL_SIZE) / 4);
+					}
+				}
+			}
+		}
 
-        public void mouseEntered(MouseEvent e) {
-        }
+		public void mouseClicked(MouseEvent e) {
+			int col = e.getX() / CELL_SIZE;
+			int row = e.getY() / CELL_SIZE;
+			jogoVelhaModel.result(row, col);
+			this.repaint();
+		}
 
-        public void mouseExited(MouseEvent e) {
-        }
-}
+		public void mousePressed(MouseEvent e) {
+		}
 
-    /*
-     * Botões de ação do jogo
-     */
-    public class MinmaxExc implements ActionListener {
+		public void mouseReleased(MouseEvent e) {
+		}
 
-        public void actionPerformed(ActionEvent e) {
-            //entrada pega o quadro atual
-           
-           Node saida;            
-          velha.minMax( velha.geraArvore());
-            //game.getResultado();
-           velha.getEstadoFinal().printBoard();
-          
-         while(true){
-              velha.minMax(velha.getEstadoFinal());
-              velha.getEstadoFinal().printBoard(); 
-         }
-           
-            
-            
-    }   
-           
-        
-    }
+		public void mouseEntered(MouseEvent e) {
+		}
 
-    public class JogadorXpc implements ActionListener {
-     
-        public void actionPerformed(ActionEvent e) {
-              
-               jogoVelha.setDisputa(1);
-        }
-    }
+		public void mouseExited(MouseEvent e) {
+		}
+	}
 
-    public class PcXPc implements ActionListener {
+	/*
+	 * Botões de ação do jogo
+	 */
+	public class MinmaxExc implements ActionListener {
 
-        public void actionPerformed(ActionEvent e) {
-              jogoVelha.setDisputa(2);
-        }
-        
-    }
+		public void actionPerformed(ActionEvent e) {
+			// entrada pega o quadro atual
 
-    public class MinmaxCLimiteExc implements ActionListener {
+			Node saida;
+			velha.minMax(velha.geraArvore());
+			// game.getResultado();
+			velha.getEstadoFinal().printBoard();
+			jogoVelhaModel.result(velha.getEstadoFinal());
+			jogoVelhaBoardUI.repaint();
 
-        public void actionPerformed(ActionEvent e) {
-        }
-    }
+			while (velha.getEstadoFinal()!=null) {
+				velha.minMax(velha.getEstadoFinal());
+				velha.getEstadoFinal().printBoard();
+			}
+			
+		}
 
-    public class CorteABExc implements ActionListener {
+	}
 
-        public void actionPerformed(ActionEvent e) {
-        }
-    }
+	public class JogadorXpc implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+
+			jogoVelha.setDisputa(1);
+		}
+	}
+
+	public class PcXPc implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			jogoVelha.setDisputa(2);
+		}
+
+	}
+
+	public class MinmaxCLimiteExc implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			printBoard(jogoVelhaModel.getBoard());
+		}
+	}
+
+	public class CorteABExc implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			int[] board = { 0, 1, 0, 2, 0, 0, 0, 0, 0 };
+			jogoVelhaModel.result(board);
+			jogoVelhaBoardUI.repaint();
+			printBoard(jogoVelhaModel.getBoard());
+
+		}
+	}
+
+	public void printBoard(int[] x) {
+		for (int i = 0; i < 9; i += 3) {
+			System.out.println(x[i] + "  " + x[i + 1] + "  " + x[i + 2]);
+		}
+		System.out.println(".......");
+	}
 }

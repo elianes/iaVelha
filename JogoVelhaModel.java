@@ -32,14 +32,18 @@ public class JogoVelhaModel {
     /*
      * Retorna um vetor de char com o quadro criado pelo usuário
      */
-    public char[] getBoard(){
-    	char[] board = new char[9];
+    public int[] getBoard(){
+    	int[] board = new int[9];
     	for (int r=0; r<ROWS; r++) {
             for (int c=0; c<COLS; c++) {
-            	if(contents[r][c].getFace() == null){
-            		board[r*3 + c] = '0';
-            	} else{
-            		board[r*3 + c] = contents[r][c].getFace().charAt(0);
+            	if(contents[r][c].getFace().equals("X")){
+            		board[r*3 + c] = 1;
+            	} 
+            	if(contents[r][c].getFace().equals("O")){
+            		board[r*3 + c] = 2;
+            	}
+            	if(contents[r][c].getFace().equals(" ")){
+            		board[r*3 + c] = 0;
             	}
             }
         }
@@ -52,11 +56,9 @@ public class JogoVelhaModel {
     public void reset() {
         for (int r=0; r<ROWS; r++) {
             for (int c=0; c<COLS; c++) {
-                contents[r][c] = new Tile(r, c, Integer.toString((r*COLS+c+1)) );
+                contents[r][c] = new Tile(r, c, " ");
             }
         }
-        emptyTile = contents[ROWS-1][COLS-1];
-        emptyTile.setFace(null);
     }
     
     /*
@@ -65,57 +67,35 @@ public class JogoVelhaModel {
     public void result(Node result) {
         for (int r=0; r<ROWS; r++) {
             for (int c=0; c<COLS; c++) {
-            	contents[r][c] = new Tile(r, c, Integer.toString((result.getBoard()[r*3 + c])));
-            	if(result.getBoard()[r*3 + c] == '0'){
-            		emptyTile = contents[r][c];
-            		emptyTile.setFace(null);
+            	if(result.getBoard()[r*3 + c] == 1){
+            		contents[r][c].setFace("X");
+            	}
+            	if(result.getBoard()[r*3 + c] == 2){
+            		contents[r][c].setFace("O");
             	}
             }
         }
     }
     
-    public void result(char[] board) {
+    public void result(int[] board) {
         for (int r=0; r<ROWS; r++) {
             for (int c=0; c<COLS; c++) {
-            	contents[r][c] = new Tile(r, c, Character.toString(board[r*3 + c]));
-            	if(board[r*3 + c] == '0'){
-            		emptyTile = contents[r][c];
-            		emptyTile.setFace(null);
+            	if(board[r*3 + c] == 1){
+            		contents[r][c].setFace("X");
+            	}
+            	if(board[r*3 + c] == 2){
+            		contents[r][c].setFace("O");
             	}
             }
         }
     }
     
-    /*
-     * Realiza a interface de troca dos quadros
-     */
-    public boolean moveTile(int r, int c) {
-        return checkEmpty(r, c, -1, 0) || checkEmpty(r, c, 1, 0)
-            || checkEmpty(r, c, 0, -1) || checkEmpty(r, c, 0, 1);
-    }
+    public void result(int row, int col) {
+    	contents[row][col].setFace("X");
+	}
     
-    private boolean checkEmpty(int r, int c, int rdelta, int cdelta) {
-        int rNeighbor = r + rdelta;
-        int cNeighbor = c + cdelta;
-        if (isLegalRowCol(rNeighbor, cNeighbor) 
-                  && contents[rNeighbor][cNeighbor] == emptyTile) {
-            exchangeTiles(r, c, rNeighbor, cNeighbor);
-            return true;
-        }
-        return false;
-    }
-    
-    public boolean isLegalRowCol(int r, int c) {
-        return r>=0 && r<ROWS && c>=0 && c<COLS;
-    }
-    
-    private void exchangeTiles(int r1, int c1, int r2, int c2) {
-        Tile temp = contents[r1][c1];
-        contents[r1][c1] = contents[r2][c2];
-        contents[r2][c2] = temp;
-    }   
-    
-}   
+}
+
 class Tile {
     private int row;     
     private int col;     
