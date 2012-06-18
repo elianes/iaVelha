@@ -28,13 +28,17 @@ public class Node {
         
         
     }
-    public Node findFilho(int []oard){
+    public Node findFilho(int [] procurado){
     	Node aux;
-    	for(int i=0;i<filhos.size();i++){
-    		aux=this.filhos.get(i);
-    		if(aux.getBoard().equals(oard)){
-    			return aux;
+    	if(!this.filhosIsNull()){
+    		for(int i=0;i<this.filhos.size();i++){
+    				aux=this.getFilho(i);
+    			if(aux.getBoard().equals(procurado)){// testar se funciona o equals
+    				return aux;
+    			}
+    			
     		}
+    		
     	}
     	return null;
     }
@@ -132,6 +136,7 @@ public class Node {
         heuristica = x-y;
     	
     }
+   
     
        
     private int functionAval(int jogada) {
@@ -152,7 +157,7 @@ public class Node {
                if (this.board[i] == jogada || this.board[i]==0) {
                    if (this.board[i + 3] == jogada || this.board[i+3]==0) {
                         if (this.board[i + 6] == jogada || this.board[i +6] ==0) {
-                            cont++;
+                        	cont++;
                         }
                     }
                 }
@@ -163,13 +168,13 @@ public class Node {
                   if(i==6){//avalia principal
                      if (this.board[0] == jogada || this.board[0] == 0) {
                        if (this.board[8] == jogada || this.board[8] == 0) {
-                            cont++;
+                    	   cont++;
                        }
                      }
                   }else {//avalia secundaria
                          if (this.board[2] == jogada || this.board[2] == 0) {
                           if (this.board[6] == jogada || this.board[6] == 0){   
-                            cont++;
+                        	  cont++;
                         }
                     }
                 }

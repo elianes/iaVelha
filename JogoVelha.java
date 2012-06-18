@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package iaVelha;
+package servidor.iaVelha;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -110,20 +110,25 @@ public class JogoVelha {
 	  while(coef.getEstado().ganhou()==0 || aux.ganhou()==0){
 		  if(jogadas/2==0){	  
 		  	  System.out.print("entre com o vetor da sua jogada \n");
-			  //entrada=("entrada_interface");
-		  	  //aui procurar na arvore o nodo que tem o vetor que o usuario entrou
-			  //depois passar o nodo para aux
-		  	  //this.fifoResul.add(aux);//adcina no conjunto solução
+			  /*entrada=("entrada_interface");
+		  	  aui procurar na arvore o nodo que tem o vetor que o usuario entrou
+		  	  aux =coef.getEstado().findFilho('entrada');//depois passar o nodo para aux
+		  	 if(aux!=null){
+			  	this.fifoResul.add(aux);//adcina no conjunto solução
+		  	  }else{
+		  	  	System.out.print("fim de jogo -  \n");
+		  	  	return;
+		  	  }
 		  	 this.jogadas++;
 		  	 if(aux.ganhou()==2){
 		  		 System.out.print("voce ganhou \n");
 		  		 return;
 		  	 }
 		  	this.jogadas++;
-		  	  
+		  	  */
 		  }else{
 			 		  
-		  	  coef=x.run(aux,jogador== 1 ? 2 : 1,-9999,99999);
+		  	  coef=x.run(aux,jogador,-9999,99999);
 			  this.fifoResul.add(coef.getEstado());
 			  this.somaVisitados(x.getVisitados());
 			  this.jogadas++;
