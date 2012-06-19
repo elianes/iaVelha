@@ -34,7 +34,7 @@ public class JogoVelha {
         jogador = 1;
         nVisitados = 0;
         this.limite = 0;
-        
+        this.disputa = -1;//Não setado
     }
 
     public void addResul(Node e) {
@@ -86,7 +86,7 @@ public class JogoVelha {
      * P@rametros:{Node} Return: {void}
      */
 
-    public Queue<Node>CorteAB_pcxpc() {
+    public Queue<Node> CorteAB_pcxpc() {
         valorRetorno coef;
         Node root = this.geraArvore();
         CorteAB x = new CorteAB();
@@ -187,7 +187,7 @@ public class JogoVelha {
         return this.estadoInicial;
     }
       
-    public void minMax_PCXPC(){
+    public Queue<Node> minMax_PCXPC(){
          Minmax game;
         geraArvore();
         game = new Minmax(this.estadoInicial);
@@ -214,6 +214,7 @@ public class JogoVelha {
                 }while(!saida.filhosIsNull());
                  this.fifoResul.add(saida);
             }
+            return fifoResul;
     }
     
     public void minMax_UserXPC(){

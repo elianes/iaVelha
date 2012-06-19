@@ -38,7 +38,7 @@ public class JogoVelhaUI extends JPanel {
 	private JButton next;
 	
 	public JogoVelhaUI() {
-
+		game = new JogoVelha();
 		jogoVelhaModel = new JogoVelhaModel();
 
 		jogadorXpc = new JButton("Jogador X PC");
@@ -158,11 +158,19 @@ public class JogoVelhaUI extends JPanel {
 
 	public class CorteABExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			game = new JogoVelha();
-			fifoResul = game.CorteAB_pcxpc();
-	    	nvisitados = game.getVisitados();
-	    	npassos = game.getJogadas();
-	    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
+			if(game.getDisputa() == -1) {
+				label = new JLabel("PC X PC ou Jogador X PC ?");
+			}
+			else {
+				if (game.getDisputa() == 2) {
+					fifoResul = game.CorteAB_pcxpc();
+				} else {
+					//Função para user
+				}
+		    	nvisitados = game.getVisitados();
+		    	npassos = game.getJogadas();
+		    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
+			}
 	    	jogoVelhaBoardUI.repaint();
 		}
 	}
@@ -170,20 +178,20 @@ public class JogoVelhaUI extends JPanel {
 	
 	public class MinmaxExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			 Node saida;
-            if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo   
-            	game.minMax_PCXPC();
-                saida = game.getResul();
-                do {
-                    saida.printBoard();
-                    jogoVelhaModel.result(saida);
-                    jogoVelhaBoardUI.repaint();
-                    saida = game.getResul();
-                } while (saida != null);
-
-            } else {
-            	game.minMax_UserXPC();
-            }
+			if(game.getDisputa() == -1) {
+				label = new JLabel("PC X PC ou Jogador X PC ?");
+			}
+			else {
+	            if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo   
+	            	fifoResul = game.minMax_PCXPC();
+	            } else {
+	            	game.minMax_UserXPC();
+	            }
+	            nvisitados = game.getVisitados();
+		    	npassos = game.getJogadas();
+		    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
+			}
+			jogoVelhaBoardUI.repaint();
 		}
 
 	}
@@ -191,24 +199,21 @@ public class JogoVelhaUI extends JPanel {
 	public class MinmaxCLimiteExc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			int limite = 5;   //pegar o limite do usuario
+			String entrada = text.getText();    // Abilio: Pegar a entrada que do campo! 
+			limite = Integer.parseInt(entrada); // Parser String to Int, agora é só passar na função :)
             text.getAction();
             label.setText(text.getText());
             game.setLimite(limite);
             Node saida;
             if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo
             	game.minMax_PCXPC();
-                saida = game.getResul();
-                while (saida != null) {
-                    saida.printBoard();
-                    jogoVelhaModel.result(saida);
-                    jogoVelhaBoardUI.repaint();
-                    saida = game.getResul();
-
-                }
-
+               	fifoResul = game.minMax_PCXPC();
             } else {
             	game.minMax_UserXPC();
             }
+            nvisitados = game.getVisitados();
+	    	npassos = game.getJogadas();
+	    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
 		}
 	}
 
