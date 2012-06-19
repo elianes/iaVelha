@@ -1,4 +1,4 @@
-package trab_ia_jogovelha;
+package iaVelha;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package trab_ia_jogovelha;
+package iaVelha;
 
 public class valorRetorno {
 	private Node estado;

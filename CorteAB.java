@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package trab_ia_jogovelha;
+package iaVelha;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class CorteAB {
     		    a.setHeuristica(Integer.MIN_VALUE);
     		  }
     		  else{
-    		    a.setHeuristica((-1)*estado.getHeristica());
+    		    a.setHeuristica(estado.getHeristica());
     		  }
     		  a.setEstado(estado);
     		  a.setFather(estado);

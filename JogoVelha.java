@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package trab_ia_jogovelha;
+package iaVelha;
 
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
-import java.util.List;
+//import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
+//import java.util.List;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -23,6 +23,7 @@ public class JogoVelha {
     private int nVisitados;
     private int jogadas;
     private Node estadoInicial;
+
     private int limite;
 
     public JogoVelha() {
@@ -33,6 +34,7 @@ public class JogoVelha {
         jogador = 1;
         nVisitados = 0;
         this.limite = 0;
+        
     }
 
     public void addResul(Node e) {
@@ -84,9 +86,8 @@ public class JogoVelha {
      * P@rametros:{Node} Return: {void}
      */
 
-    public void CorteAB_pcxpc() {
+    public Queue<Node>CorteAB_pcxpc() {
         valorRetorno coef;
-        int passos = 1;
         Node root = this.geraArvore();
         CorteAB x = new CorteAB();
         coef = x.run(root, jogador, -9999, 99999);//o x sempre começa
@@ -99,7 +100,7 @@ public class JogoVelha {
             this.somaVisitados(x.getVisitados());
             this.jogadas++;
         }
-        return;
+        return this.fifoResul;
     }
 
     public int getVisitados() {
@@ -110,42 +111,18 @@ public class JogoVelha {
         return this.jogadas;
     }
 
-    public void CorteAB_pcxuser() {
+    public Node CorteAB_pcxuser(int [] jogada,int jogador ) {
         valorRetorno coef;
-        int[] entrada;
-        Node aux, root = this.geraArvore();
+        Node root,aux;
+        root=this.geraArvore(jogada,jogador);
         CorteAB x = new CorteAB();
         coef = x.run(root, jogador, -9999, 99999);//o x sempre começa
         aux = coef.getEstado();
         this.somaVisitados(x.getVisitados());
         this.jogadas++;
-        this.fifoResul.add(coef.getEstado());
-        while (coef.getEstado().ganhou() == 0 || aux.ganhou() == 0) {
-            if (jogadas / 2 == 0) {
-                System.out.print("entre com o vetor da sua jogada \n");
-                /*
-                 * entrada=("entrada_interface"); aui procurar na arvore o nodo
-                 * que tem o vetor que o usuario entrou aux
-                 * =coef.getEstado().findFilho('entrada');//depois passar o nodo
-                 * para aux if(aux!=null){ this.fifoResul.add(aux);//adcina no
-                 * conjunto solução }else{ System.out.print("fim de jogo - \n");
-                 * return; } this.jogadas++; if(aux.ganhou()==2){
-                 * System.out.print("voce ganhou \n"); return; } this.jogadas++;
-                 */
-            } else {
-
-                coef = x.run(aux, jogador, -9999, 99999);
-                this.fifoResul.add(coef.getEstado());
-                this.somaVisitados(x.getVisitados());
-                this.jogadas++;
-                if (coef.getEstado().ganhou() == 1) {
-                    System.out.print("o cpu ganhou \n");
-                    return;
-                }
-            }
-        }
-        return;
+        return aux;
     }
+
 
     public Node geraArvore() {// modifiquei para ele retornar um node no caso a raiz da arvore para começarmos a busca : vanderson
         Node newFilho, father;
@@ -178,7 +155,37 @@ public class JogoVelha {
         } while (!this.fifo.isEmpty());
         return this.estadoInicial;
     }
-
+    public Node geraArvore(int[]root,int joga) {// modifiquei para ele retornar um node no caso a raiz da arvore para começarmos a busca : vanderson
+        Node newFilho, father;
+        int[] boardInicial = root;
+        father = new Node(boardInicial);
+        board = father.getBoard();
+        this.estadoInicial = father;
+        int jogador =joga;
+        int nivel;
+        do {
+            for (int i = 0; i <= 8; i++) {
+                if (board[i] == 0) {
+                    board[i] = jogador;  //1 ou 2 = X ou O
+                    newFilho = new Node(father, board);
+                    board[i] = 0;//tem que zerar o vetor depois senao vai encher tudo de 1 ou 2: vanderson
+                    father.insertFilhos(newFilho);//insere o filho na lista de filhos do node :vanderson
+                    fifo.add(newFilho);
+                }
+            }
+            nivel = father.getNivel();
+            if (!fifo.isEmpty()) {
+                father = this.fifo.remove();
+                board = father.getBoard();
+                if (father != null) {
+                    if (nivel != father.getNivel()) {  //no proximo nivel será trocado de jogador
+                        jogador = jogador == 1 ? 2 : 1;
+                    }
+                }
+            }
+        } while (!this.fifo.isEmpty());
+        return this.estadoInicial;
+    }
       
     public void minMax_PCXPC(){
          Minmax game;
