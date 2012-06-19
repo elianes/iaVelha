@@ -1,4 +1,4 @@
-package iaVelha;
+//package iaVelha;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -20,14 +20,14 @@ public class Trab_IA_jogoVelha {
      */
     public static void main(String[] args) {
         
-    	/*
+    	
     	JFrame window = new JFrame("TIC - TAC - TOE");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(new JogoVelhaUI());
         window.pack();  
         window.show();  
         window.setResizable(false);
-        
+        /*
         // pc x pc
     	Node aux;
          int visitados,jogadas;
@@ -43,7 +43,7 @@ public class Trab_IA_jogoVelha {
     	/*
     	 * pc x user
     	 */
-      	Node aux;
+      	/*Node aux;
         int visitados,jogadas;
         JogoVelha game=new JogoVelha();
         int[] entrada={0,2,2, 2, 1, 1, 1, 1, 0};
@@ -57,7 +57,7 @@ public class Trab_IA_jogoVelha {
     	//game.getResultado();
     	System.out.print("Foram visitados " + visitados + "\n");
     	System.out.print("Foram feitas " + jogadas + "jogadas \n");
-       
+       */
         
           
     	
