@@ -1,4 +1,4 @@
-package servidor.iaVelha;
+package trab_ia_jogovelha;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -18,15 +18,15 @@ public class Trab_IA_jogoVelha {
      */
     public static void main(String[] args) {
         
-       /*
+      
     	JFrame window = new JFrame("TIC - TAC - TOE");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setContentPane(new JogoVelhaUI());
         window.pack();  
         window.show();  
         window.setResizable(false);
-       
-	*/
+        /*
+	
           	int visitados,jogadas;
     	JogoVelha game=new JogoVelha();
     	game.CorteAB_pcxpc();
@@ -36,7 +36,7 @@ public class Trab_IA_jogoVelha {
     	System.out.print("Foram visitados " + visitados + "\n");
     	System.out.print("Foram feitas " + jogadas + "jogadas \n");
        
-     
+     */
           
     	
     }

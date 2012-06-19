@@ -1,4 +1,4 @@
-package servidor.iaVelha;
+package trab_ia_jogovelha;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -133,7 +133,7 @@ public class Node {
     	int x = functionAval(this.jogada);
     	int y = functionAval(this.jogada == 1 ? 2 : 1);
  
-        heuristica = x-y;
+        heuristica = y-x;
     	
     }
    
@@ -200,7 +200,7 @@ public class Node {
             }
 
             if (i == 0 || i == 1 || i == 2) {    //avalia as colunas
-                if ((this.board[i] == this.board[i + 1]) && (this.board[i + 1] == this.board[i + 2])) {
+                if ((this.board[i] == this.board[i + 3]) && (this.board[i + 3] == this.board[i + 6])) {
                     jogGanho = this.board[i];
                 }
             }
