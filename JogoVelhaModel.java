@@ -92,8 +92,12 @@ public class JogoVelhaModel {
         }
     }
     
-    public void result(int row, int col) {
-    	contents[row][col].setFace("X");
+    public boolean result(int row, int col) {
+    	if(contents[row][col].getFace().equals(" ")) {
+    		contents[row][col].setFace("X");
+    		return true;
+    	}
+    	return false;
 	}
     
 }

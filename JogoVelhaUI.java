@@ -36,6 +36,8 @@ public class JogoVelhaUI extends JPanel {
 	private JButton minmaxCLimite;
 	private JButton corteAB;
 	private JButton next;
+	public boolean minmaxuser;
+	public boolean corteabuser;
 	
 	public JogoVelhaUI() {
 		game = new JogoVelha();
@@ -122,8 +124,17 @@ public class JogoVelhaUI extends JPanel {
 		public void mouseClicked(MouseEvent e) {
 			int col = e.getX() / CELL_SIZE;
 			int row = e.getY() / CELL_SIZE;
-			jogoVelhaModel.result(row, col);
-			this.repaint();
+			if(game.getDisputa() == 1) {
+				if(jogoVelhaModel.result(row, col)) {
+					if(minmaxuser) {
+						//game.minMax_UserXPC(jogoVelhaModel.getBoard());
+					}
+					if(corteabuser) {
+						//game.CorteAB_pcxuser(jogoVelhaModel.getBoard());
+					}
+					this.repaint();
+				}
+			}
 		}
 
 		public void mousePressed(MouseEvent e) {
@@ -144,6 +155,10 @@ public class JogoVelhaUI extends JPanel {
 	 */
 	public class JogadorXpc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			game = new JogoVelha();
+			minmaxuser = false;
+			corteabuser = false;
+			jogoVelhaModel.reset();
             game.setDisputa(1);
 			label.setText("Escolha o Algoritmo");
 		}
@@ -151,6 +166,8 @@ public class JogoVelhaUI extends JPanel {
 	
 	public class PcXPc implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+			game = new JogoVelha();
+			jogoVelhaModel.reset();
 			game.setDisputa(2);
 			label.setText("Escolha o Algoritmo");
 		}
@@ -166,6 +183,8 @@ public class JogoVelhaUI extends JPanel {
 					fifoResul = game.CorteAB_pcxpc();
 				} else {
 					//Função para user
+					corteabuser = true;
+					return;
 				}
 		    	nvisitados = game.getVisitados();
 		    	npassos = game.getJogadas();
@@ -184,8 +203,9 @@ public class JogoVelhaUI extends JPanel {
 			else {
 	            if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo   
 	            	fifoResul = game.minMax_PCXPC();
-	            } else {
-	            	game.minMax_UserXPC();
+	            } else {	            
+	            	minmaxuser = true;
+	            	return;
 	            }
 	            nvisitados = game.getVisitados();
 		    	npassos = game.getJogadas();
@@ -209,7 +229,8 @@ public class JogoVelhaUI extends JPanel {
             	game.minMax_PCXPC();
                	fifoResul = game.minMax_PCXPC();
             } else {
-            	game.minMax_UserXPC();
+            	minmaxuser = true;
+            	//game.minMax_UserXPC();
             }
             nvisitados = game.getVisitados();
 	    	npassos = game.getJogadas();
