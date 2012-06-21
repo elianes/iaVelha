@@ -64,6 +64,9 @@ public class JogoVelha {
         this.disputa = i;
 
     }
+    void setEstadoInicial(Node inicial){
+        this.estadoInicial = inicial;
+    }
 
     public int getDisputa() {
         return this.disputa;
@@ -188,37 +191,73 @@ public class JogoVelha {
     }
       
     public Queue<Node> minMax_PCXPC(){
-         Minmax game;
+      Minmax game;
         geraArvore();
         game = new Minmax(this.estadoInicial);
-         Node saida = this.estadoInicial.getFilho((int)(Math.random()*8) );
-            if (this.limite == 0) {  //para decidir se é com limite de profundidade
-                do {
-                    this.fifoResul.add(saida);
-                    game.setEntrada(saida);
-                    game.run();
-                    saida = game.getJogadaCerta();
-                } while (!saida.filhosIsNull());
-                  this.fifoResul.add(saida);   
-            } else {    //com limite de profundidade
-                do{
-                    this.fifoResul.add(saida);
-                    game.setEntrada(saida);
-                    game.run();
-                    saida = game.getJogadaCerta();
-                    
-                }while(this.limite != saida.getNivel());
-                do{
-                    this.fifoResul.add(saida);
-                    saida = saida.getFilho();
-                }while(!saida.filhosIsNull());
-                 this.fifoResul.add(saida);
-            }
-            return fifoResul;
+        Node saida = this.estadoInicial.getFilho((int) (Math.random() * 8));
+        if (this.limite == 0) {  //para decidir se é com limite de profundidade
+            do {
+                this.fifoResul.add(saida);
+                System.out.println("entrada do MINMAX++++++++++++");
+                saida.printBoard();
+                System.out.println("entrada do MINMAX++++++++++++");
+                game.setEntrada(saida);
+                game.run();
+                saida = game.getJogadaCerta();
+                this.somaVisitados(game.getVisitados());
+                this.jogadas++;
+            } while (!saida.filhosIsNull());
+            this.fifoResul.add(saida);
+        } else {    //com limite de profundidade
+            do {
+                this.fifoResul.add(saida);
+                game.setEntrada(saida);
+                game.run();
+                saida = game.getJogadaCerta();
+                 this.somaVisitados(game.getVisitados());
+                 if(saida.ganhou()==saida.getJogada()){
+                      this.fifoResul.add(saida);
+                     return this.fifoResul;
+                 }
+                this.jogadas++;
+            } while (this.limite != saida.getNivel());
+            do {
+                this.fifoResul.add(saida);
+                saida = saida.getFilho();
+                 this.somaVisitados(game.getVisitados());
+                this.jogadas++;
+            } while (!saida.filhosIsNull());
+            this.fifoResul.add(saida);
+        }
+        return this.fifoResul;
     }
     
-    public void minMax_UserXPC(){
-        
+    public Node minMax_UserXPC(Node inicial) {
+        Node Saida, entrada;
+        Minmax game;
+       
+        if (this.limite == 0) {  //para decidir se é com limite de profundidade
+            System.out.println("entrada do MINMAX++++++++++++");
+            
+            entrada = this.estadoInicial.findFilho(inicial.getBoard());
+            
+            game = new  Minmax(entrada);
+            game.run();
+            Saida = game.getJogadaCerta();
+           
+            this.somaVisitados(game.getVisitados());
+            this.jogadas++;
+        } else {    //com limite de profundidade
+            entrada = this.estadoInicial.findFilho(inicial.getBoard());
+            game = new  Minmax(entrada);
+            game.run();
+             this.somaVisitados(game.getVisitados());
+             this.jogadas++;
+            Saida = game.getJogadaCerta();
+        }
+        if(Saida == null)
+            return inicial;
+        return Saida;
     }
 
     public void printBoard() {

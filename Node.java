@@ -3,6 +3,7 @@
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*
  * Nodo para a arvore, contem: int[] board - quadro do jogo Node father - nodo
@@ -33,7 +34,11 @@ public class Node {
     	if(!this.filhosIsNull()){
     		for(int i=0;i<this.filhos.size();i++){
     				aux=this.getFilho(i);
-    			if(aux.getBoard().equals(procurado)){// testar se funciona o equals
+                                System.out.println("procurando....");
+                                aux.printBoard();
+                                int [] x = aux.getBoard();
+    			if(Arrays.equals(x, procurado))
+                            {
     				return aux;
     			}
     			
