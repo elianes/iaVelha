@@ -130,7 +130,8 @@ public class JogoVelhaUI extends JPanel {
 						//game.minMax_UserXPC(jogoVelhaModel.getBoard());
 					}
 					if(corteabuser) {
-						//game.CorteAB_pcxuser(jogoVelhaModel.getBoard());
+						node = game.CorteAB_pcxuser(jogoVelhaModel.getBoard(),2);
+						jogoVelhaModel.result(node);
 					}
 					this.repaint();
 				}
@@ -160,7 +161,8 @@ public class JogoVelhaUI extends JPanel {
 			corteabuser = false;
 			jogoVelhaModel.reset();
             game.setDisputa(1);
-			label.setText("Escolha o Algoritmo");
+			label.setText(" Escolha o Algoritmo");
+			jogoVelhaBoardUI.repaint();
 		}
 	}
 	
@@ -169,7 +171,8 @@ public class JogoVelhaUI extends JPanel {
 			game = new JogoVelha();
 			jogoVelhaModel.reset();
 			game.setDisputa(2);
-			label.setText("Escolha o Algoritmo");
+			label.setText(" Escolha o Algoritmo");
+			jogoVelhaBoardUI.repaint();
 		}
 	}
 
@@ -181,15 +184,14 @@ public class JogoVelhaUI extends JPanel {
 			else {
 				if (game.getDisputa() == 2) {
 					fifoResul = game.CorteAB_pcxpc();
+					nvisitados = game.getVisitados();
+			    	npassos = game.getJogadas();
+			    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
 				} else {
-					//Função para user
 					corteabuser = true;
-					return;
+	            	label.setText(" Aguardando Jogada do Usuário");
 				}
-		    	nvisitados = game.getVisitados();
-		    	npassos = game.getJogadas();
-		    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
-			}
+		    }
 	    	jogoVelhaBoardUI.repaint();
 		}
 	}
@@ -203,15 +205,15 @@ public class JogoVelhaUI extends JPanel {
 			else {
 	            if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo   
 	            	fifoResul = game.minMax_PCXPC();
+	            	nvisitados = game.getVisitados();
+			    	npassos = game.getJogadas();
+			    	label.setText(" Nodos Visitados " + nvisitados + " Jogadas " + npassos);
 	            } else {	            
 	            	minmaxuser = true;
-	            	return;
+	            	label.setText(" Aguardando Jogada do Usuário");
 	            }
-	            nvisitados = game.getVisitados();
-		    	npassos = game.getJogadas();
-		    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
+	            jogoVelhaBoardUI.repaint();
 			}
-			jogoVelhaBoardUI.repaint();
 		}
 
 	}
@@ -228,13 +230,15 @@ public class JogoVelhaUI extends JPanel {
             if (game.getDisputa() == 2) {   //para decidir qual tipo de jogo
             	game.minMax_PCXPC();
                	fifoResul = game.minMax_PCXPC();
+               	nvisitados = game.getVisitados();
+    	    	npassos = game.getJogadas();
+    	    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
             } else {
             	minmaxuser = true;
-            	//game.minMax_UserXPC();
+            	minmaxuser = true;
+            	label.setText(" Aguardando Jogada do Usuário");
             }
-            nvisitados = game.getVisitados();
-	    	npassos = game.getJogadas();
-	    	label.setText("Nodos Visitados " + nvisitados + " Jogadas " + npassos);
+			jogoVelhaBoardUI.repaint();
 		}
 	}
 
